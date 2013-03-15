@@ -73,6 +73,7 @@ class BatchFeatureImage {
 
         global $wpdb;
 
+        //query ID from first attachment with type of image
         $id = $wpdb -> get_var($wpdb -> prepare("SELECT ID FROM {$wpdb->posts} WHERE `post_type` = %s AND `post_mime_type` = %s AND `post_parent` = %d ORDER by ID ASC LIMIT 1", 'attachment', 'image/jpeg ', $post_ID));
 
         return $id;
