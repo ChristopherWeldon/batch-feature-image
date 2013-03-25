@@ -35,12 +35,13 @@ class BatchFeatureImage {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         } else {            
             echo '<div class="wrap">';
-            echo '<h2>Feature Image Batch Operation!</h2>';
+            echo '<h2>Feature Image Batch</h2>';
 
             if (isset($_POST['set-images'])) {
                 // Update images
                 $output = $this -> set_post_img_batch();
-                if (!empty($output)) {
+
+                if (!empty($output) && $output != '<ul></ul>') {
                     //Display output
                     echo $output;
                 } else {
@@ -95,9 +96,13 @@ class BatchFeatureImage {
                 $thumbnail_id = $this -> get_attachment_id_from_postID($post_ID);
                 // Make sure we have a valid thumbnail ID
                 if (is_numeric($thumbnail_id) && $thumbnail_id > 0) {
-                    $output .= '<li>POST: ' . $post_ID . ' Feature Image set to: ' . $thumbnail_id . '</li>';
+                    $title = get_the_title($post_ID);
+                    $post_link = get_edit_post_link($post_ID);
+                    $thumbnail_link = wp_get_attachment_link($thumbnail_id,array(32,32));
+                    $output .= '<li>Post: <a href="'.$post_link.'">'
+                            .$title.' (ID: ' . $post_ID . ')</a> Feature Image set to: '.$thumbnail_link
+                        . '</li>';
 
-                    //See http://codex.wordpress.org/Function_Reference/set_post_thumbnail
                     set_post_thumbnail($post_ID, $thumbnail_id);
                 }
             }
